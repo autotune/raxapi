@@ -24,11 +24,10 @@ IMAGEID=""
 CONTAINER="exported-images"
 TASK=""
 
-if [[ ! -e $DIR ]];
+if [[ $TASK == "" ]]
 then
-	echo "Creating $DIR"
-	mkdir $DIR
-	mkdir -p $DIR/tmp/images
+	echo "Task ID required"
+	exit
 fi
 
 
@@ -63,9 +62,6 @@ then
 		APIKEY="$(cat $DIR/conf/creds.cfg|tail -n1)"
 fi
 
-echo -n "Image ID: " 
-read IMAGEID
-
 curl -s -d \
 "{
 \"auth\":
@@ -88,17 +84,11 @@ echo "Auth token is: $TOKEN"
 
 sleep 2
 
-# curl -XGET -H "X-Auth-Token:  $TOKEN" -H "Content-type: application/json" https://$DATACENTER.images.api.rackspacecloud.com/v2/$ACCOUNT/tasks/$TASK | python -m json.tool
+echo "Checking status..."
 
-sleep 3
+curl -XGET -H "X-Auth-Token:  $TOKEN" -H "Content-type: application/json" https://$DATACENTER.images.api.rackspacecloud.com/v2/$ACCOUNT/tasks/$TASK | python -m json.tool
 
-echo "Generating image..."
+exit
 
-DATA="{\"type\": \"export\",\"input\":{\"image_uuid\": \"$IMAGEID\",\"receiving_swift_container\": \"$CONTAINER\"}}"
-
-
-curl -s -X POST -H "X-Auth-Token: $TOKEN" -H "Content-Type: application/json" -H "Accept: application/json" --data "$DATA" https://$DATACENTER.images.api.rackspacecloud.com/v2/$ACCOUNT/tasks > $DIR/tmp/images.txt
-
-echo "$CONTAINER ID: $(cat $DIR/tmp/images.txt|awk '{print $8}'|tr '",' ' '|awk '{print $1}')"
 
 
