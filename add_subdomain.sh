@@ -24,9 +24,10 @@ OPTIONS:
    -a      api key (cloud) 
    -u      username (cloud)
    -d      host (ip/domain)
-   -s      subomdain
+   -s      subdomain
    -r      record type
 
+EXAMPLE: ./add_subdomain.sh -a 1234567 -u herpderp -d 127.0.0.1 -s www1 -r A
 EOF
 }
 
@@ -78,9 +79,7 @@ done
 if [[ -z "$USERNAME" ]] || [[ -z "$APIKEY" ]] || [[ -z "$HOST" ]] || [[ -z "$SUBDOMAIN" ]] || [[ -z "$TYPE" ]]
 then
      usage
-
 printf "
-
 API: $APIKEY
 DDI: $DDI  
 TOKEN: $TOKEN  
