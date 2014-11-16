@@ -17,7 +17,7 @@ usage()
 cat << EOF
 usage: $0 options
 
-This script makes it easy to add a domain in bulk
+This script makes it easy to add a subdomain in bulk
 
 OPTIONS:
    -h      Show this message
